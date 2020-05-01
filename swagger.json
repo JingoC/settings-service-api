@@ -1,0 +1,59 @@
+﻿{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Configuration Server API"
+    },
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "host": "",
+    "basePath": "",
+    "paths": {
+        "/configs/{application}/{environment}": {
+            "get": {
+                "summary": "Gets config for Application:Environment",
+                "description": "",
+                "parameters":[
+                    {
+                        "required": true,
+                        "in": "path",
+                        "name": "application",
+                        "type": "string"
+                    },
+                    {
+                        "required": true,
+                        "in": "path",
+                        "name": "environment",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "properties": {
+                                    "id":{
+                                        "type": "number"
+                                    },
+                                    "application": {
+                                        "type": "string"
+                                    },
+                                    "environment": {
+                                        "type": "string"
+                                    },
+                                    "json": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
