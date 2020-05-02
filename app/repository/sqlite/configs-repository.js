@@ -1,18 +1,87 @@
+const Sequelize = require('sequelize');
 const SqliteBaseRepository = require('./sqlite-base-repository')
+
+const Model = Sequelize.Model;
+class Config extends Model {}
+
 
 module.exports = class ConfigsRepository extends SqliteBaseRepository {
 
+    constructor(options) {
+        super(options);
+
+        Config.init({
+            id: {
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
+                primaryKey: true
+            },
+            application: {
+              type: Sequelize.STRING,
+              allowNull: false
+            },
+            environment: {
+              type: Sequelize.STRING,
+              allowNull: false
+            },
+            json: {
+              type: Sequelize.STRING,
+              allowNull: false
+            }
+          }, {
+            sequelize: this.sequelize,
+            modelName: 'config'
+          });
+
+
+        Config.sync({force: false});
+    }
+
+    async getAllAsync() {
+        return await Config.findAll();
+    }
+
+    async getByApplicationAsync(application) {
+        return await Config.findAll({
+            where: {
+                application: application
+            }
+        });
+    }
+
     async getByApplicationAndEnvironmentAsync(application, environment){
 
-        var result = [];
+        return await Config.findOne({ where: {
+            application: application,
+            environment: environment
+        }});
+    }
 
-        var sql = `select * from [Configs] where Application = '${application}' and Environment = '${environment}'`;
+    async getByIdAsync(id){
 
-        await this._DbContext.all(sql, (err, rows) => {
-            result = rows;
-        })
+        return await Config.findOne({ where: {
+            id: id
+        }});
+    }
 
-        return result;
+    async insertAsync(item) {
+        return await Config.create(item);
+    }
+
+    async updateAsync(item) {
+        await Config.update(item, {
+            where: {
+                id: item.id
+            }
+        });
+    }
+
+    async deleteAsync(id) {
+        await Config.destroy({
+            where: {
+                id: id
+            }
+        });
     }
 
 }

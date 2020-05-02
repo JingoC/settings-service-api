@@ -54,6 +54,135 @@
                     }
                 }
             }
+        },
+        "/configs": {
+            "get": {
+                "summary": "Get all config rows",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "properties": {
+                                    "id":{
+                                        "type": "number"
+                                    },
+                                    "application": {
+                                        "type": "string"
+                                    },
+                                    "environment": {
+                                        "type": "string"
+                                    },
+                                    "json": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "parameters": [
+                    {
+                        "required": true,
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "application",
+                                "environment",
+                                "json"
+                            ],
+                            "properties": {
+                                "application":{
+                                    "type": "string"
+                                },
+                                "environment":{
+                                    "type": "string"
+                                },
+                                "json": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "ok"
+                    }
+                }
+            },
+            "put": {
+                "parameters": [
+                    {
+                        "required": true,
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "id",
+                                "application",
+                                "environment",
+                                "json"
+                            ],
+                            "properties": {
+                                "id": {
+                                    "type":"number"
+                                },
+                                "application":{
+                                    "type": "string"
+                                },
+                                "environment":{
+                                    "type": "string"
+                                },
+                                "json": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "ok"
+                    }
+                }
+            },
+            "delete": {
+                "parameters": [
+                    {
+                        "required": true,
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "type": "object",
+                            "required": [ "id" ],
+                            "properties": {
+                                "id":{
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses":{
+                    "204": {
+                        "description": "ok"
+                    },
+                    "404":{
+                        "description": "not found"
+                    },
+                    "400":{
+                        "description": "bad request"
+                    }
+                }
+            }
         }
     }
 }

@@ -11,19 +11,25 @@ module.exports = class ConfigRouter extends BaseRouter {
     this._router.get('/:application/:environment', (req, res) => this.getByApplicationAndEnvironmentAsync(req, res));
     this._router.get('/', (req, res) => this.getAll(req, res));
     this._router.post('/', (req, res) => this.post(req, res));
-    this._router.put('/:id', (req, res) => this.put(req, res));
-    this._router.delete('/:id', (req, res) => this.delete(req, res));
+    this._router.put('/', (req, res) => this.put(req, res));
+    this._router.delete('/', (req, res) => this.delete(req, res));
   }
 
-  getAll(req, res){
-    res.send(this.configsRepository.getAll());
+  async getAll(req, res){
+    var items = await this.configsRepository.getAllAsync();
+
+    res.send(items);
   }
 
-  getByApplicationAndEnvironmentAsync(req, res) {
+  async getByApplicationAndEnvironmentAsync(req, res) {
 
     const params = req.params;
-    if (params.hasOwnProperty('application') && params.hasOwnProperty('environment')){
-      var data = this.configsRepository.getByApplicationAndEnvironmentAsync(params.application, params.environment);
+
+    var isApplication = params.hasOwnProperty('application') && params.application.trim() !== '';
+    var isEnvironment = params.hasOwnProperty('environment') && params.environment.trim() !== '';
+
+    if (isApplication && isEnvironment){
+      var data = await this.configsRepository.getByApplicationAndEnvironmentAsync(params.application, params.environment);
 
       if (data){
         res.send(data);
@@ -31,36 +37,91 @@ module.exports = class ConfigRouter extends BaseRouter {
         res.sendStatus(404);
       }
     }else{
-      res.sendStatus(400);
+
+      var text = '';
+      if (!isApplication) text += `param 'application' not found`;
+      if (!isEnvironment) text += `param 'environment' not found`;
+
+      return res.status(400).send(this.getErrorJson(text));
     }
   }
 
-  post(req, res) {
-    //req.body.title,
-    res.status(201).json(newItem);
+  async post(req, res) {
+
+    const params = req.body;
+
+    var isApplication = params.hasOwnProperty('application') && params.application.trim() !== '';
+    var isEnvironment = params.hasOwnProperty('environment') && params.environment.trim() !== '';
+    var isJson = params.hasOwnProperty('json') && params.environment.trim() !== '';
+
+    if (isApplication && isEnvironment && isJson) {
+
+        var item = await this.configsRepository.getByApplicationAndEnvironmentAsync(params.application, params.environment);
+
+        if (item){
+          var text = `object with Application: ${params.application}, Environment: ${params.environment} is exists`;
+          return res.status(400).send(this.getErrorJson(text));
+        }
+
+        item = await this.configsRepository.insert({
+          application: params.application,
+          environment: params.environment,
+          json: params.json
+        });
+
+        res.status(201).send(item);
+      }else{
+        var text = '';
+
+        if (!isApplication) text += `param 'application' not found`;
+        if (!isEnvironment) text += `param 'environment' not found`;
+        if (!isJson) text += `param 'json' not found`;
+
+        return res.status(400).send(this.getErrorJson(text));
+      }
   }
 
-  put(req, res) {
-    //req.body.
-    
-    let found = data.find(function (item) {
-      return item.id === parseInt(req.params.id);
-    });
+  async put(req, res) {
 
-    if (found) {
+    var params = req.body;
 
-      res.sendStatus(204);
+    var item = await this.configsRepository.getByIdAsync(params.id);
+
+    if (item) {
+
+      var newItem = {
+        id: item.id,
+        application: params.hasOwnProperty('application') ? params.application : item.application,
+        environment: params.hasOwnProperty('environment') ? params.environment : item.environment,
+        json: params.hasOwnProperty('json') ? params.json : item.json
+      }
+
+      await this.configsRepository.updateAsync(newItem);
+
+      res.status(200).send(newItem);
     } else {
       res.sendStatus(404);
     }
   }
 
   async delete(req, res) {
-    if (found) {
-    
-    }
 
-    res.sendStatus(204);
+    var id = req.body.id;
+
+    if (id){
+
+      var item = await this.configsRepository.getByIdAsync(id);
+
+      if (item) {
+        await this.configsRepository.deleteAsync(id);
+      }else{
+        res.sendStatus(404);
+      }
+
+      res.sendStatus(204);
+    }else{
+      return res.status(400).send(this.getErrorJson(`param 'id' not found`));
+    }
   }
 
 }

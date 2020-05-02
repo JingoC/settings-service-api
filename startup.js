@@ -33,9 +33,7 @@ module.exports = class Startup {
         app.use('/configs', (new ConfigRouter({services: services})).getRouter());
 
         // root route
-        app.use('/', function(req, res) {
-            res.send('hello');
-        });
+        //app.use('/', function(req, res) { res.sendStatus(404); });
     }
 
 }

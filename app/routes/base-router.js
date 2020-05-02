@@ -10,4 +10,10 @@ module.exports = class BaseRouter {
     getRouter(){
         return this._router;
     }
+
+    getErrorJson(text) {
+      return {
+        error: text
+      }
+    }
 }
