@@ -11,12 +11,15 @@ class Program {
 
     Main() {
 
+        // config application
         startup.configurationServices(services);
         startup.configure(appExpress, services);
 
         // Start server
 
         const server = http.createServer(appExpress);
+
+
 
         const port = 8000;
         server.listen(port, async () => {

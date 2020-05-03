@@ -63,7 +63,7 @@ module.exports = class ConfigRouter extends BaseRouter {
           return res.status(400).send(this.getErrorJson(text));
         }
 
-        item = await this.configsRepository.insert({
+        item = await this.configsRepository.insertAsync({
           application: params.application,
           environment: params.environment,
           json: params.json

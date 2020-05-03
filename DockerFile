@@ -2,6 +2,7 @@
 WORKDIR /usr/src/app
 
 COPY . .
+COPY ./client/dist/ui.js .
 
 RUN npm install
 
