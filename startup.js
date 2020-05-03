@@ -27,13 +27,15 @@ module.exports = class Startup {
 
         // swagger route
         app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-        //app.use('/api/v1', configsRouter);
 
         // configs web api route
         app.use('/configs', (new ConfigRouter({services: services})).getRouter());
 
+        // UI route
+        app.use('/ui', function(req, res) { res.sendStatus(404); });
+
         // root route
-        //app.use('/', function(req, res) { res.sendStatus(404); });
+        app.use('/', function(req, res) { res.sendStatus(404); });
     }
 
 }
