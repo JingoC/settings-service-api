@@ -1,6 +1,9 @@
 ﻿<template>
     <div class="col-12">
         <vue-tabs>
+            <v-tab title="Read">
+                <tab-read-view :configs="configs"></tab-read-view>
+            </v-tab>
             <v-tab title="Delete">
                 <tab-delete-view
                     v-bind:configs.sync="configs"
@@ -9,9 +12,6 @@
             </v-tab>
             <v-tab title="Insert">
                 <tab-insert-view :configs="configs"></tab-insert-view>
-            </v-tab>
-            <v-tab title="Read">
-                <tab-read-view :configs="configs"></tab-read-view>
             </v-tab>
             <v-tab title="Update">
                 <tab-update-view :configs="configs"></tab-update-view>

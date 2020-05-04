@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
         <main-view></main-view>
       </div>

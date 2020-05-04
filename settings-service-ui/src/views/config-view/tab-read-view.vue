@@ -8,19 +8,44 @@
             </div>
             <div class="col-2 h-100"></div>
         </div>
-        <div class="col-12 d-flex mt-5 justify-content-center">
-            <table class="table table-sm col-12">
+        <div class="col-12 mt-5 d-flex justify-content-center">
+            <table class="table table-sm table-fixed">
                 <thead class="thead-light">
                     <tr>
-                    <th>Key</th>
-                    <th>Value</th>
+                        <th width="20%">Application</th>
+                        <th width="10%">Environment</th>
+                        <th width="70%">
+                            <div class="col-12">Json</div>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(config, i) in dictionaryConfigs" :key="i">
-                        <td>{{config.key}}</td>
-                        <td>
-                            {{config.value}}
+                    <tr v-for="(config, i) in selectedConfigs" :key="i">
+                        <td class="align-middle">{{config.application}}</td>
+                        <td class="align-middle">{{config.environment}}</td>
+                        <td class="align-middle">
+                            <table>
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th width="40%">Key</th>
+                                        <th width="60%">Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="o in getKeyValueArray(config.json)" :key="o.key">
+                                        <td class="align-middle">
+                                            <small>
+                                                {{o.key}}
+                                            </small>
+                                        </td>
+                                        <td class="align-middle">
+                                            <small>
+                                                {{o.value}}
+                                            </small>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </td>
                     </tr>
                 </tbody>
@@ -49,31 +74,25 @@ export default {
   },
   methods: {
 
-    updateKeyValue: function() {
+    getKeyValueArray: function(json) {
 
-        var vue = this;
-        this.dictionaryConfigs = [];
+        var dictionaryConfigs = [];
 
-        console.log(this.selectedConfigs);
-        this.selectedConfigs.forEach(function(x) {
+        var o = JSON.parse(json);
 
-            console.log(x);
-            var o = JSON.parse(x.json);
+        for (var key in o) {
+            dictionaryConfigs.push({
+                key: key,
+                value: JSON.stringify(o[key])
+            })
+        }
 
-            for (var key in o) {
-                vue.dictionaryConfigs.push({
-                    key: key,
-                    value: JSON.stringify(o[key])
-                })
-            }
-        });
+        return dictionaryConfigs;
     },
 
     // events
     onChanged_FilterConfigs: function(filtedConfigs) {
         this.selectedConfigs = filtedConfigs;
-
-        this.updateKeyValue();
     }
 
     // requests
