@@ -2,9 +2,11 @@
 WORKDIR /usr/src/app
 
 COPY . .
-COPY ./client/dist/ui.js .
+COPY ./settings-service-ui/dist ./settings-service-ui/dist
 
+RUN npm rebuild
 RUN npm install
+RUN npm install sqlite3
 
 EXPOSE 8000
 

@@ -73,7 +73,6 @@ export default {
             };
 
             try{
-                console.log('send request');
                 return await ConfigApi.insertAsync(data);
             }catch(e){
                 console.log(e);

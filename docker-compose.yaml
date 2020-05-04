@@ -1,0 +1,17 @@
+﻿version: '3.7'
+
+services:
+  settings-service-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '27500:8000'
+    environment:
+      NODE_ENV: production
+    networks:
+      - settings-services
+
+networks:
+  settings-services:
+    driver: bridge

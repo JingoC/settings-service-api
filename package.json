@@ -9,16 +9,16 @@
   "author": "alexei kochetkov",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "global-tunnel-ng": "^2.7.1",
-    "request": "^2.81.0",
-    "sequelize": "^5.21.7",
-    "sqlite3": "^4.2.0",
-    "swagger-ui-express": "^4.1.4"
+    "body-parser": "1.19.0",
+    "cors": "2.8.5",
+    "express": "4.17.1",
+    "global-tunnel-ng": "2.7.1",
+    "request": "2.88.2",
+    "sqlite3": "4.2.0",
+    "sequelize": "5.21.7",
+    "swagger-ui-express": "4.1.4"
   },
   "devDependencies": {
-    "nodemon": "^1.19.4"
+    "nodemon": "1.19.4"
   }
 }
