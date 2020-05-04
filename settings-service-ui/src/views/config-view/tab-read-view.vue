@@ -6,7 +6,7 @@
                 :configs="configs"
                 @changed="onChanged_FilterConfigs"></config-filter-select>
             </div>
-            <div class="col-2"></div>
+            <div class="col-2 h-100"></div>
         </div>
         <div class="col-12 d-flex mt-5 justify-content-center">
             <table class="table table-sm col-12">

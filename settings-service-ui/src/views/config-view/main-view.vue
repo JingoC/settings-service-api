@@ -1,17 +1,20 @@
 ﻿<template>
     <div class="col-12">
         <vue-tabs>
+            <v-tab title="Delete">
+                <tab-delete-view
+                    v-bind:configs.sync="configs"
+                    @deleted="onDeleted_Config"
+                ></tab-delete-view>
+            </v-tab>
             <v-tab title="Insert">
                 <tab-insert-view :configs="configs"></tab-insert-view>
             </v-tab>
             <v-tab title="Read">
                 <tab-read-view :configs="configs"></tab-read-view>
             </v-tab>
-            <v-tab title="Update" class="col-12">
+            <v-tab title="Update">
                 <tab-update-view :configs="configs"></tab-update-view>
-            </v-tab>
-            <v-tab title="Delete" class="col-12">
-                <tab-delete-view :configs="configs"></tab-delete-view>
             </v-tab>
         </vue-tabs>
     </div>
@@ -40,6 +43,12 @@ export default {
     }
   },
   methods: {
+
+        // events
+
+        onDeleted_Config: async function() {
+            this.configs = await this.getAllConfigs();
+        },
 
         // requests
 

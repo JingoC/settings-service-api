@@ -106,7 +106,7 @@ module.exports = class ConfigRouter extends BaseRouter {
 
   async delete(req, res) {
 
-    var id = req.body.id;
+  var id = req.body.id;
 
     if (id){
 
