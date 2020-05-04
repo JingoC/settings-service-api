@@ -28,7 +28,7 @@
 
 <script>
 
-import axios from 'axios'
+import ConfigApi from '../../api/config-api.js'
 
 export default {
   name: 'tab-insert-view',
@@ -74,7 +74,7 @@ export default {
 
             try{
                 console.log('send request');
-                return await axios.post('http://localhost:8000/configs', data);
+                return await ConfigApi.insertAsync(data);
             }catch(e){
                 console.log(e);
                 return null;

@@ -61,7 +61,7 @@ table td {word-wrap:break-word;}
 
 <script>
 
-import axios from 'axios'
+import ConfigApi from '../../api/config-api.js'
 import ConfigFilterSelect from '../../components/config-filter-select'
 
 export default {
@@ -119,12 +119,7 @@ export default {
         };
 
         try{
-            return await axios.delete('http://localhost:8000/configs', {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: JSON.stringify(data)
-            });
+            return await ConfigApi.deleteAsync(data);
         }catch(e){
             console.log(e);
             return null;

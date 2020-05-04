@@ -22,7 +22,7 @@
 
 <script>
 
-import axios from 'axios'
+import ConfigApi from '../../api/config-api.js'
 
 import {VueTabs, VTab} from 'vue-nav-tabs'
 import 'vue-nav-tabs/themes/vue-tabs.css'
@@ -54,7 +54,7 @@ export default {
 
         getAllConfigs: async function() {
             try{
-                return (await axios.get('http://localhost:8000/configs')).data;
+                return await ConfigApi.getAllAsync();
             }catch(e){
                 console.log(e);
                 return [];

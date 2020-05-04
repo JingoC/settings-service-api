@@ -31,7 +31,8 @@ module.exports = class Startup {
         app.use(bodyParser.json());
 
         // static content
-        app.use(express.static(path.join('../settings-service-ui/dist')))
+        app.use('/ui', express.static(path.join('./settings-service-ui/dist')))
+        app.use(express.static(path.join('./settings-service-ui/dist')));
 
         // swagger route
         app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

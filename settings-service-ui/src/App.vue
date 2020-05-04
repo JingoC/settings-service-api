@@ -16,6 +16,11 @@ export default {
   name: 'App',
   components: {
     MainView
+  },
+  props: {
+    baseUrl: String
+  },
+  created: function() {
   }
 }
 </script>
