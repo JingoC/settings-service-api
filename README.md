@@ -6,6 +6,7 @@ Contains:
 - WebAPI CRUD operations for configuration management
 - Swagger
 - User interface
+- Support Sqlite\MSSql\Postgres
 
 # Install
 
