@@ -8,11 +8,11 @@ module.exports = class ConfigRouter extends BaseRouter {
 
     this.configsRepository = this._services.get('ConfigsRepository');
 
-    this._router.get('/:application/:environment', (req, res) => this.getByApplicationAndEnvironmentAsync(req, res));
-    this._router.get('/', (req, res) => this.getAll(req, res));
-    this._router.post('/', (req, res) => this.post(req, res));
-    this._router.put('/', (req, res) => this.put(req, res));
-    this._router.delete('/', (req, res) => this.delete(req, res));
+    this._router.get('/configs/:application/:environment', (req, res) => this.getByApplicationAndEnvironmentAsync(req, res));
+    this._router.get('/configs', (req, res) => this.getAll(req, res));
+    this._router.post('/configs', (req, res) => this.post(req, res));
+    this._router.put('/configs', (req, res) => this.put(req, res));
+    this._router.delete('/configs', (req, res) => this.delete(req, res));
   }
 
   async getAll(req, res){
@@ -83,6 +83,7 @@ module.exports = class ConfigRouter extends BaseRouter {
 
   async put(req, res) {
 
+      console.log(req);
     var params = req.body;
 
     var item = await this.configsRepository.getByIdAsync(params.id);

@@ -1,6 +1,12 @@
 ﻿<template>
     <div class="col-12">
         <vue-tabs>
+            <v-tab title="Setting">
+                <tab-setting-view></tab-setting-view>
+            </v-tab>
+            <v-tab title="Export\Import">
+                <tab-export-import-view :configs="configs"></tab-export-import-view>
+            </v-tab>
             <v-tab title="Read">
                 <tab-read-view :configs="configs"></tab-read-view>
             </v-tab>
@@ -31,11 +37,13 @@ import TabInsertView from './tab-insert-view'
 import TabReadView from './tab-read-view'
 import TabUpdateView from './tab-update-view'
 import TabDeleteView from './tab-delete-view'
+import TabExportImportView from './tab-export-import-view'
+import TabSettingView from '../setting-view/tab-setting-view'
 
 export default {
   name: 'main-view',
   components: {
-    VueTabs, VTab, TabInsertView, TabReadView, TabUpdateView, TabDeleteView
+    VueTabs, VTab, TabInsertView, TabReadView, TabUpdateView, TabDeleteView, TabExportImportView, TabSettingView
   },
   data: function() {
     return {

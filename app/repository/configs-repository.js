@@ -1,11 +1,11 @@
 const Sequelize = require('sequelize');
-const SqliteBaseRepository = require('./sqlite-base-repository')
+const DbProvider = require('./db-providers/db-provider')
 
 const Model = Sequelize.Model;
 class Config extends Model {}
 
 
-module.exports = class ConfigsRepository extends SqliteBaseRepository {
+module.exports = class ConfigsRepository extends DbProvider {
 
     constructor(options) {
         super(options);
@@ -29,7 +29,7 @@ module.exports = class ConfigsRepository extends SqliteBaseRepository {
               allowNull: false
             }
           }, {
-            sequelize: this.sequelize,
+            sequelize: this.dbProvider.sequelize,
             modelName: 'config'
           });
 

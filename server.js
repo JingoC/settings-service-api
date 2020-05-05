@@ -9,10 +9,10 @@ const startup = new Startup();
 
 class Program {
 
-    Main() {
+    async Main() {
 
         // config application
-        startup.configurationServices(services);
+        await startup.configurationServices(services);
         startup.configure(appExpress, services);
 
         // Start server
@@ -29,5 +29,7 @@ class Program {
 }
 
 const program = new Program();
-program.Main();
+var promise = program.Main();
+
+Promise.all([promise]);
 

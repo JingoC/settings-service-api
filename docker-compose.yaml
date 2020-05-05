@@ -12,6 +12,40 @@ services:
     networks:
       - settings-services
 
+  db-postgres:
+    image: docker.io/bitnami/postgresql:11.7.0-debian-10-r9
+    container_name: db-postgres
+    ports:
+       - 5432:5432
+    restart: always
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "settings"
+    networks:
+      - settings-services
+
+  db-mssql:
+    image: "mcr.microsoft.com/mssql/server"
+    container_name: db-mssql
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "yourStrong(!)Password"
+      ACCEPT_EULA: "Y"
+    networks:
+      - settings-services
+
+  db-mysql:
+    image: mysql
+    container_name: db-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - settings-services
+
 networks:
   settings-services:
     driver: bridge

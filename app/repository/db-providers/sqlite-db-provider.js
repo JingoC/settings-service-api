@@ -1,13 +1,13 @@
 ﻿const Sequelize = require('sequelize');
 
 
-module.exports = class SqliteBaseRepository {
+module.exports = class SqliteDbProvider {
 
     constructor(options){
 
         this.sequelize = new Sequelize({
             dialect: 'sqlite',
-            storage: options.connectionString,
+            storage: options.connectionString.database,
             max: 5,
             min: 0
         });
