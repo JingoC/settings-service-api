@@ -1,5 +1,7 @@
 # Introduction
 
+![microservice](https://github.com/JingoC/resources_files/blob/master/microservice-configuration_0.png)
+
 Ready Microservice for storing json configurations.
 
 Contains:
