@@ -2,9 +2,10 @@
 
 services:
   settings-service-api:
+    container_name: settings-service-api
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DockerFile
     ports:
       - '27500:8000'
     environment:

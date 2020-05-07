@@ -1,12 +1,15 @@
 ﻿FROM node:12
+
+WORKDIR /usr/src/app
+COPY . .
+
+WORKDIR /usr/src/app/settings-service-ui
+RUN npm install
+RUN npm run build
+
 WORKDIR /usr/src/app
 
-COPY . .
-COPY ./settings-service-ui/dist ./settings-service-ui/dist
-
-RUN npm rebuild
 RUN npm install
-RUN npm install sqlite3
 
 EXPOSE 8000
 
