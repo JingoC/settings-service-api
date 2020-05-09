@@ -14,5 +14,5 @@ Contains:
 
 Build and publish image from source
 
-```docker-compose up```
+```docker-compose up --build```
 
