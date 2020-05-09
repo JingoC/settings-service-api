@@ -1,9 +1,10 @@
 <style>
 .style-chooser .vs__search::placeholder,
-  .style-chooser .vs__dropdown-toggle,
-  .style-chooser .vs__dropdown-menu {
-    text-align: center;
-  }
+.style-chooser .vs__dropdown-toggle,
+.style-chooser .vs__dropdown-menu {
+  text-align: center;
+}
+
 </style>
 
 <template>

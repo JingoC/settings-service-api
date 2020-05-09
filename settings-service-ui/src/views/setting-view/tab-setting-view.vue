@@ -1,5 +1,16 @@
-﻿<template>
-    <div class="col-12 mt-4">
+﻿<style>
+select {
+    text-align: center;
+    text-align-last: center;
+}
+
+option {
+  text-align: center;
+}
+</style>
+
+<template>
+    <div class="col-12 mt-4" :key="forceRender">
         <div class="col-12 d-flex justify-content-between">
             <div class="col-2">
                 <button type="button"
@@ -10,7 +21,7 @@
                 </button>
             </div>
         </div>
-        <div class="col-12 d-flex mt-5 justify-content-center">
+        <div class="col-12 d-flex mt-5 justify-content-center" v-if="isValidSettings">
             <table class="table table-sm col-12">
                 <thead class="thead-light">
                     <tr>
@@ -19,10 +30,53 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(setting, i) in settings" :key="i">
-                        <td class="align-middle">{{setting.key}}</td>
+                    <tr>
+                        <td class="align-middle">provider</td>
                         <td class="align-middle">
-                            <input type="text" class="form-control-sm w-100" v-model="setting.value" />
+                            <select
+                                class="form-control form-control-sm text-center"
+                                v-model="settings.provider.value"
+                                @change="onChange_Provider"
+                                >
+                                <option value='sqlite'>sqlite</option>
+                                <option value='mssql'>mssql</option>
+                                <option value='postgres'>postgres</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle">host</td>
+                        <td class="align-middle">
+                            <input type="text"
+                                class="form-control form-control-sm text-center"
+                                v-model="settings.host.value"
+                                :disabled="disabledHost()"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle">database</td>
+                        <td class="align-middle">
+                            <input type="text"
+                                class="form-control form-control-sm text-center"
+                                v-model="settings.database.value" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle">username</td>
+                        <td class="align-middle">
+                            <input type="text"
+                                class="form-control form-control-sm text-center"
+                                v-model="settings.username.value"
+                                :disabled="disabledUsername()"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle">password</td>
+                        <td class="align-middle">
+                            <input type="text"
+                                class="form-control form-control-sm text-center"
+                                v-model="settings.password.value"
+                                :disabled="disabledPassword()"/>
                         </td>
                     </tr>
                 </tbody>
@@ -39,34 +93,59 @@ export default {
   name: 'tab-setting-view',
   data: function() {
     return {
-        defaultSettings: [],
-        settings: []
+        settings: {
+            provider: '',
+            host: '',
+            database: '',
+            username: '',
+            password: ''
+        },
+        forceRender: 0
     }
   },
   methods: {
+
+    disabledHost: function() {
+        return this.settings.provider.value === 'sqlite';
+    },
+    disabledUsername: function() {
+        return this.settings.provider.value === 'sqlite';
+    },
+    disabledPassword: function() {
+        return this.settings.provider.value === 'sqlite';
+    },
 
     // events
 
     onClick_UpdateConfig: async function() {
 
         var vue = this;
+        var promisses = [];
 
-        var promisses = this.settings
-            .filter(x => x.value !== x.default)
-            .map(x =>  vue.updateSettingAsync({
-                    id: x.id,
-                    key: x.key,
-                    value: x.value
-                })
-            );
+        for(var key in this.settings){
+            var o = this.settings[key];
 
-        console.log(promisses);
-        Promise.all(promisses).then();
-        console.log(promisses);
+            if (o.value !== o.default) {
+                var updateObject = {
+                    id: o.id,
+                    key: key,
+                    value: o.value
+                };
+                console.log(updateObject);
+                promisses.push(this.updateSettingAsync(updateObject));
+            }
+        }
 
-        await this.getSettingsAsync();
+        Promise.all(promisses).then(async function() {
+            await vue.getSettingsAsync();
+
+            this.$emit('updated');
+        });
     },
 
+    onChange_Provider: function() {
+        this.forceRender++;
+    },
     // requests
 
     updateSettingAsync: async function(item) {
@@ -86,12 +165,26 @@ export default {
     },
 
     getSettingsAsync: async function() {
-        this.settings = await SettingApi.getAllAsync();
+        var vue = this;
+        var settings = await SettingApi.getAllAsync();
 
-        this.settings.forEach(function(x) {
-            x['default'] = x.value
+        this.settings = {};
+
+        settings.forEach(function(x) {
+            vue.settings[x.key] = {};
+
+            vue.settings[x.key]['id'] = x.id;
+            vue.settings[x.key]['value'] = x.value;
+            vue.settings[x.key]['default'] = x.value;
         });
     }
+  },
+  computed: {
+        isValidSettings: function() {
+            var isValid = Object.prototype.hasOwnProperty.call(this.settings, 'provider') &&
+                            Object.prototype.hasOwnProperty.call(this.settings.provider, 'value');
+            return isValid;
+        }
   },
   created: async function() {
     await this.getSettingsAsync();

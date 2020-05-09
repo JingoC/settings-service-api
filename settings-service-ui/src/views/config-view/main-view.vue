@@ -1,7 +1,8 @@
 ﻿<template>
-    <div class="col-12">
+    <div class="col-12" :key="forceRender">
         <vue-tabs>
-            <v-tab title="Setting">
+            <v-tab title="Setting"
+                @updated="onUpdated_Settings">
                 <tab-setting-view></tab-setting-view>
             </v-tab>
             <!--
@@ -51,7 +52,8 @@ export default {
   },
   data: function() {
     return {
-        configs: []
+        configs: [],
+        forceRender: 0
     }
   },
   methods: {
@@ -60,6 +62,12 @@ export default {
 
         onDeleted_Config: async function() {
             this.configs = await this.getAllConfigs();
+            this.forceRender++;
+        },
+
+        onUpdated_Settings: async function() {
+            this.configs = await this.getAllConfigs();
+            this.forceRender++;
         },
 
         // requests
