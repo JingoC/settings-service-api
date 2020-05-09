@@ -83,9 +83,9 @@ module.exports = class ConfigRouter extends BaseRouter {
 
   async put(req, res) {
 
-      console.log(req);
     var params = req.body;
-
+    console.log(params);
+    
     var item = await this.configsRepository.getByIdAsync(params.id);
 
     if (item) {

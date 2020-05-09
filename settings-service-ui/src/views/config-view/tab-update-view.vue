@@ -4,13 +4,14 @@
             <div class="col-8">
                 <config-filter-select
                 :configs="configs"
+                :onlyFullSelect="true"
                 @changed="onChanged_FilterConfigs"></config-filter-select>
             </div>
             <div class="col-2">
-                <button type="button" 
+                <button type="button"
                     class="btn btn-primary w-100"
                     v-on:click="onClick_UpdateConfig"
-                    >
+                    :disabled="selectedConfig == null" >
                     Update
                 </button>
             </div>
@@ -19,16 +20,44 @@
             <table class="table table-sm col-12">
                 <thead class="thead-light">
                     <tr>
-                    <th>Key</th>
-                    <th>Value</th>
+                    <th width="5%" class="align-middle"></th>
+                    <th width="30%" class="align-middle">Key</th>
+                    <th width="65%" class="align-middle">Value</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-show="selectedConfig != null">
                     <tr v-for="(config, i) in dictionaryConfigs" :key="i">
-                        <td>{{config.key}}</td>
-                        <td>
+                        <td class="align-middle">
+                            <button
+                                class="w-100 btn btn-danger btn-sm"
+                                v-on:click="config.isDeleted=true"
+                                v-if="!config.isDeleted">
+                                Delete
+                            </button>
+                            <button
+                                class="w-100 btn btn-warning btn-sm"
+                                v-on:click="config.isDeleted=false"
+                                v-else>
+                                Revert
+                            </button>
+                        </td>
+                        <td class="align-middle">
+                            <input type="text" class="form-control-sm w-100" v-model="config.key" />
+                        </td>
+                        <td class="align-middle">
                             <input type="text" class="form-control-sm w-100" v-model="config.value" />
                         </td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle">
+                            <button
+                                class="w-100 btn btn-success btn-sm"
+                                v-on:click="onClick_AddRow">
+                                Add
+                            </button>
+                        </td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle"></td>
                     </tr>
                 </tbody>
             </table>
@@ -51,69 +80,74 @@ export default {
         application: '',
         environment: '',
         json: '',
-        selectedConfigs: [],
+        selectedConfig: null,
         dictionaryConfigs: []
     }
   },
   props: {
-      configs: Array
+      configs: { Type: Array, required: true }
   },
   methods: {
 
     updateKeyValue: function() {
 
-        var vue = this;
         this.dictionaryConfigs = [];
 
-        console.log(this.selectedConfigs);
-        this.selectedConfigs.forEach(function(x) {
+        var o = JSON.parse(this.selectedConfig.json);
 
-            console.log(x);
-            var o = JSON.parse(x.json);
-
-            for (var key in o) {
-                vue.dictionaryConfigs.push({
-                    id: x.id,
-                    key: key,
-                    value: JSON.stringify(o[key])
-                })
-            }
-        });
+        for (var key in o) {
+            this.dictionaryConfigs.push({
+                id: this.selectedConfig.id,
+                key: key,
+                value: JSON.stringify(o[key]),
+                isDeleted: false
+            });
+        }
     },
 
     // events
 
+    onClick_AddRow: function() {
+        this.dictionaryConfigs.push({
+            id: this.selectedConfig.id,
+            key: '',
+            value: '',
+            isDeleted: false
+        });
+    },
+
     onClick_UpdateConfig: async function() {
 
-        var vue = this;
+        var x = this.selectedConfig;
 
-        this.selectedConfigs.forEach(async function(x) {
+        var id = x.id;
+        var app = x.application;
+        var env = x.environment;
 
-            var id = x.id;
-            var app = x.application;
-            var env = x.environment;
+        var dict = this.dictionaryConfigs;
 
-            var dict = vue.dictionaryConfigs.filter(y => y.id === id);
+        var o = {};
+        dict.forEach(function(y) {
+            if (!y.isDeleted && y.key !== '') {
+                o[y.key] = JSON.parse(y.value);
+            }
+        });
 
-            var o = {};
-            dict.forEach(function(y) {
-                o[y.key] = y.value
-            })
-
-            var response = await vue.updateConfigAsync({
-                id: id,
-                application: app,
-                environment: env,
-                json: JSON.stringify(o)
-            });
-
-            console.log(response);
+        await this.updateConfigAsync({
+            id: id,
+            application: app,
+            environment: env,
+            json: JSON.stringify(o)
         });
     },
 
     onChanged_FilterConfigs: function(filtedConfigs) {
-        this.selectedConfigs = filtedConfigs;
-        this.updateKeyValue();
+        if (filtedConfigs.length > 0){
+            this.selectedConfig = filtedConfigs[0];
+            this.updateKeyValue();
+        }else{
+            this.selectedConfig = null;
+        }
     },
 
     // requests

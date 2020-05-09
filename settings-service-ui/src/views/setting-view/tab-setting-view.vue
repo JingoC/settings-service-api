@@ -14,14 +14,14 @@
             <table class="table table-sm col-12">
                 <thead class="thead-light">
                     <tr>
-                    <th>Key</th>
-                    <th>Value</th>
+                    <th class="align-middle">Key</th>
+                    <th class="align-middle">Value</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(setting, i) in settings" :key="i">
-                        <td>{{setting.key}}</td>
-                        <td>
+                        <td class="align-middle">{{setting.key}}</td>
+                        <td class="align-middle">
                             <input type="text" class="form-control-sm w-100" v-model="setting.value" />
                         </td>
                     </tr>

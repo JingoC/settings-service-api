@@ -12,9 +12,9 @@
             <table class="table table-sm table-fixed">
                 <thead class="thead-light">
                     <tr>
-                        <th width="20%">Application</th>
-                        <th width="10%">Environment</th>
-                        <th width="70%">
+                        <th class="align-middle" width="20%">Application</th>
+                        <th class="align-middle" width="10%">Environment</th>
+                        <th class="align-middle" width="70%">
                             <div class="col-12">Json</div>
                         </th>
                     </tr>

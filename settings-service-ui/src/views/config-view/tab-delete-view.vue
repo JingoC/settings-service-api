@@ -23,11 +23,11 @@ table td {word-wrap:break-word;}
             <table class="table table-sm table-fixed">
                 <thead class="thead-light">
                     <tr>
-                        <th width="3%"></th>
-                        <th width="7%">Id</th>
-                        <th width="20%">Application</th>
-                        <th width="10%">Environment</th>
-                        <th width="60%">
+                        <th class="align-middle" width="3%"></th>
+                        <th class="align-middle" width="7%">Id</th>
+                        <th class="align-middle" width="20%">Application</th>
+                        <th class="align-middle" width="10%">Environment</th>
+                        <th class="align-middle" width="60%">
                             <div class="col-12">Json</div>
                         </th>
                     </tr>

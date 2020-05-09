@@ -1,18 +1,30 @@
+<style>
+.style-chooser .vs__search::placeholder,
+  .style-chooser .vs__dropdown-toggle,
+  .style-chooser .vs__dropdown-menu {
+    text-align: center;
+  }
+</style>
+
 <template>
   <div class="col-12 d-flex justify-content-between">
     <div class="col-6">
-        <v-select placeholder="Select Application"
+        <v-select
+            class="style-chooser"
+            placeholder="Select Application"
             :options="applications"
             v-model="applicationSelected"
             @input="onChange_Config"
              />
     </div>
     <div class="col-6">
-        <v-select placeholder="Select Environment"
+        <v-select
+            class="style-chooser"
+            placeholder="Select Environment"
             :options="environments"
             v-model="environmentSelected"
             @input="onChange_Config"
-             />
+            :disabled="onlyFullSelect && (applicationSelected === null)"  />
     </div>
   </div>
 </template>
@@ -27,12 +39,13 @@ export default {
     vSelect
   },
   props: {
-    configs: Array
+    configs: { Type: Array, required: true },
+    onlyFullSelect: { Type: Boolean, default: false }
   },
   data: function() {
     return {
-      applicationSelected: "",
-      environmentSelected: "",
+      applicationSelected: null,
+      environmentSelected: null,
     }
   },
   methods: {
@@ -54,12 +67,21 @@ export default {
         configs = configs.filter(x => x.environment === vue.environmentSelected)
       }
 
+      if (this.onlyFullSelect && this.environmentSelected === null) {
+        configs = [];
+      }
+
       return configs;
     },
 
     // events
 
     onChange_Config: function() {
+
+      if (this.applicationSelected === null){
+        this.environmentSelected = null;
+      }
+
       this.$emit('changed', this.getConfigsFiltered());
     }
 
